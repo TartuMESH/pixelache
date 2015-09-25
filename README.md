@@ -1,10 +1,19 @@
-# Pixelache mesh networking workshop in Helsinki Sept 26th 2015
+# Pixelache mesh networking workshop in Helsinki Sep 26th 2015
 
 These are instructions for:
 
 * http://livingspaces.pixelache.ac/events/mesh-networking-workshop
 
 ## Preparing Raspberry Pi 1/2 with Raspbian Wheezy for B.A.T.M.A.N
+
+You need:
+
+* Raspberry Pi single board computer
+* MicroSD card with Debian Wheezy on it
+* Power adapter for Raspberry (of course)
+* Mesh capable USB wifi dongle (see: http://elinux.org/RPi_USB_Wi-Fi_Adapters#Working_USB_Wi-Fi_Adapters)
+* Ethernet cable to connect your Raspberry to a switch, router or similar
+* A computer to connect to your Raspberry through LAN (or console access, if you prefer)
 
 ### Update everything and upgrade to Debian Jessie (takes **a lot** of time)
 
@@ -58,3 +67,17 @@ cd pixelache
 chmod +x pixelme.sh
 sudo ./pixelme.sh wlan0
 ```
+
+You can set one device in a mesh to be the bridge to Internet:
+
+```console
+sudo ./pixelme.sh wlan0 eth0
+```
+
+Now you can start experimenting with basic network tools, you should be able to ping other devices etc. The main tool to diagnose and control mesh specific properties is `batctl`:
+
+* http://www.open-mesh.org/projects/batman-adv/wiki/Using-batctl
+
+## Exploring the mesh with A.L.F.R.E.D et al
+
+_To be continued..._
