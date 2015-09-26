@@ -12,6 +12,26 @@ fi
 
 set -x
 
+if [ "$1" == "kill" ]; then
+    
+    INET=$(brctl show | tail -1)
+    ifconfig br-mesh down
+    brctl delif br-mesh
+    brctl delbr br-mesh
+
+    IFACE=$(batctl if | cut -d ":" -f 1)
+    ifconfig bat0 down -promisc
+    ifconfig $INET down -promisc
+
+    batctl if del $IFACE
+    #ifconfig $IFACE down
+
+    service ifplugd start
+    service network-manager start
+
+    exit
+fi
+
 IFACE=$1
 INET=$2
 WAIT=10
@@ -28,6 +48,7 @@ ifconfig bat0 down
 batctl if del $IFACE
 ifconfig $IFACE down
 ifconfig $IFACE mtu 1532
+iwconfig $IFACE enc off
 iwconfig $IFACE mode ad-hoc essid PixelMESH ap 60:10:24:24:56:55 channel 1 # 60°10'24" N, 24°56'55" E
 batctl if add $IFACE
 ifconfig $IFACE up
@@ -40,11 +61,12 @@ if [[ -z "$INET" ]]; then
 
 else
 
-    brctl addbr bridge-link
-    brctl addif bridge-link bat0
-    brctl addif bridge-link $INET
-    dhclient bridge-link
-    ifconfig bridge-link
+    ifconfig $INET up promisc
+    brctl addbr br-mesh
+    brctl addif br-mesh bat0
+    brctl addif br-mesh $INET
+    dhclient br-mesh
+    ifconfig br-mesh
     sleep $WAIT
 
 fi
