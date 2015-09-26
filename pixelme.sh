@@ -16,7 +16,8 @@ if [ "$1" == "kill" ]; then
     
     INET=$(brctl show | tail -1)
     ifconfig br-mesh down
-    brctl delif br-mesh
+    brctl delif br-mesh bat0
+    brctl delif br-mesh $INET
     brctl delbr br-mesh
 
     IFACE=$(batctl if | cut -d ":" -f 1)
